@@ -75,19 +75,20 @@ document.addEventListener("DOMContentLoaded", function() {
 
         switch (key) {
             case 'ArrowUp':
-                ballTop = Math.max(ballTop - step, 0);
+                ballTop = Math.max(ballTop - step, 0); // Bovenkant van het speelgebied
                 break;
             case 'ArrowDown':
-                ballTop = Math.min(ballTop + step, gameContainer.clientHeight - ball.clientHeight);
+                ballTop = Math.min(ballTop + step, gameContainer.clientHeight - ball.clientHeight); // Onderkant van het speelgebied
                 break;
             case 'ArrowLeft':
-                ballLeft = Math.max(ballLeft - step, 0);
+                ballLeft = Math.max(ballLeft - step, 0); // Linkerkant van het speelgebied
                 break;
             case 'ArrowRight':
-                ballLeft = Math.min(ballLeft + step, gameContainer.clientWidth - ball.clientWidth);
+                ballLeft = Math.min(ballLeft + step, gameContainer.clientWidth - ball.clientWidth); // Rechterkant van het speelgebied
                 break;
         }
 
+        // Update de positie van de bal binnen het speelgebied
         ball.style.top = ballTop + 'px';
         ball.style.left = ballLeft + 'px';
 
@@ -135,4 +136,3 @@ document.addEventListener("DOMContentLoaded", function() {
     // Initialiseer het niveau-display
     updateLevelDisplay();
 });
-</script>
