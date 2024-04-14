@@ -11,6 +11,7 @@ body, html {
     height: 500px;
     margin: 50px auto;
     border: 2px solid black;
+    overflow: hidden; /* Verberg obstakels die buiten het game-container bewegen */
 }
 
 #ball {
@@ -36,7 +37,6 @@ body, html {
 
 .obstacle {
     position: absolute;
-    transform-origin: center; /* Gebruik het midden van de driehoek als transformatiepunt */
 }
 
 #obstacle1 {
