@@ -11,8 +11,12 @@
     <div id="game-container">
         <div id="ball"></div>
         <div id="goal"></div>
-        <div class="obstacle" id="obstacle1"></div>
-        <div class="obstacle" id="obstacle2"></div>
+        <svg id="obstacle1" class="obstacle" width="40" height="40" viewBox="0 0 40 40">
+            <polygon points="20,5 35,35 5,35" fill="blue" />
+        </svg>
+        <svg id="obstacle2" class="obstacle" width="40" height="40" viewBox="0 0 40 40">
+            <polygon points="5,5 35,20 5,35" fill="blue" />
+        </svg>
     </div>
     <script src="script.js"></script>
 </body>
