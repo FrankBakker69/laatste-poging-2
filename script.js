@@ -32,6 +32,7 @@ document.addEventListener("DOMContentLoaded", function() {
         goal.style.top = goalPosition.y + 'px';
         goal.style.left = goalPosition.x + 'px';
 
+        // Plaats het obstakel op een willekeurige positie binnen het game-container
         obstacle.style.top = obstaclePosition.y + 'px';
         obstacle.style.left = obstaclePosition.x + 'px';
     }
@@ -118,22 +119,3 @@ document.addEventListener("DOMContentLoaded", function() {
             ballRect.bottom > containerRect.bottom ||
             ballRect.left < containerRect.left ||
             ballRect.right > containerRect.right
-        );
-    }
-
-    // Controleer of er een botsing is tussen de bal en het doel
-    function checkCollision(ball, goal) {
-        const ballRect = ball.getBoundingClientRect();
-        const goalRect = goal.getBoundingClientRect();
-        return !(ballRect.right < goalRect.left ||
-                 ballRect.left > goalRect.right ||
-                 ballRect.bottom < goalRect.top ||
-                 ballRect.top > goalRect.bottom);
-    }
-
-    // Initialiseer het niveau-display
-    updateLevelDisplay();
-});
-</script>
-</body>
-</html>
