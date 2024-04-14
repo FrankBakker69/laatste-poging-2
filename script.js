@@ -5,22 +5,25 @@ document.addEventListener("DOMContentLoaded", function() {
     const levelDisplay = document.getElementById('level-display');
     let currentLevel = 1;
 
-    // Functie om een willekeurige positie binnen het game-container te krijgen
-    function getRandomPosition() {
+    // Functie om een willekeurige positie binnen het game-container te krijgen, met uitzondering van de excludePosition
+    function generateUniquePosition(excludePosition) {
         const containerWidth = gameContainer.clientWidth;
         const containerHeight = gameContainer.clientHeight;
         const size = 50; // Diameter van bal en doel
 
-        const x = Math.floor(Math.random() * (containerWidth - size));
-        const y = Math.floor(Math.random() * (containerHeight - size));
+        let x, y;
+        do {
+            x = Math.floor(Math.random() * (containerWidth - size));
+            y = Math.floor(Math.random() * (containerHeight - size));
+        } while (Math.abs(x - excludePosition.x) < size && Math.abs(y - excludePosition.y) < size);
 
         return { x, y };
     }
 
-    // Plaats de bal en het doel op willekeurige posities binnen het game-container
+    // Plaats de bal en het doel op willekeurige unieke posities binnen het game-container
     function placeElementsRandomly() {
-        const ballPosition = getRandomPosition();
-        const goalPosition = getRandomPosition();
+        const ballPosition = generateUniquePosition({ x: -1, y: -1 }); // Begin met een ongeldige positie
+        const goalPosition = generateUniquePosition(ballPosition);
 
         ball.style.top = ballPosition.y + 'px';
         ball.style.left = ballPosition.x + 'px';
