@@ -28,6 +28,7 @@ body, html {
     height: 50px;
     background-color: blue;
     position: absolute;
-    top: 200px; /* Startpositie van het obstakel */
-    left: 50px; /* Startpositie van het obstakel */
+    /* Plaats het obstakel binnen het game-container */
+    top: 200px; /* Verticale positie van het obstakel */
+    left: 200px; /* Horizontale positie van het obstakel */
 }
