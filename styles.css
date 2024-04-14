@@ -2,60 +2,32 @@ body, html {
     margin: 0;
     padding: 0;
     height: 100%;
-    font-family: Arial, sans-serif;
 }
-
 #game-container {
     position: relative;
     width: 500px;
     height: 500px;
     margin: 50px auto;
     border: 2px solid black;
-    overflow: hidden; /* Verberg obstakels die buiten het game-container bewegen */
 }
-
 #ball {
-    width: 20px;
-    height: 20px;
+    width: 50px;
+    height: 50px;
     background-color: red;
     border-radius: 50%;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
 }
-
 #goal {
-    width: 30px;
-    height: 30px;
+    width: 50px;
+    height: 50px;
     background-color: green;
     position: absolute;
-    top: 80%;
-    left: 80%;
-    border-radius: 50%;
 }
-
-.obstacle {
+#obstacle {
+    width: 50px;
+    height: 50px;
+    background-color: blue;
     position: absolute;
-}
-
-#obstacle1 {
-    top: 30%;
-    left: 20%;
-}
-
-#obstacle2 {
-    top: 70%;
-    left: 70%;
-}
-
-#level-display {
-    position: absolute;
-    top: 10px;
-    left: 50%;
-    transform: translateX(-50%);
-    font-size: 24px;
-    font-weight: bold;
-    color: white;
-    text-align: center;
+    top: 200px; /* Startpositie van het obstakel */
+    left: 50px; /* Startpositie van het obstakel */
 }
