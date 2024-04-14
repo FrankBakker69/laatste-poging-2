@@ -37,6 +37,7 @@ body, html {
 
 .obstacle {
     position: absolute;
+    transform-origin: center; /* Gebruik het midden van de driehoek als transformatiepunt */
 }
 
 #obstacle1 {
