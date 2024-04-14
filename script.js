@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
-    // Controleer verliesvoorwaarde (bal raakt rand van game-container)
+    // Controleer verliesvoorwaarde (bal raakt rand van game-container of obstakel)
     function checkLossCondition() {
         const ballRect = ball.getBoundingClientRect();
         const containerRect = gameContainer.getBoundingClientRect();
@@ -82,6 +82,22 @@ document.addEventListener("DOMContentLoaded", function() {
             updateLevelDisplay();
             placeElementsRandomly(); // Nieuw spel starten
         }
+
+        // Controleer obstakelbotsing
+        obstacles.forEach(obstacle => {
+            const obstacleRect = obstacle.getBoundingClientRect();
+
+            if (!(ballRect.right < obstacleRect.left ||
+                  ballRect.left > obstacleRect.right ||
+                  ballRect.bottom < obstacleRect.top ||
+                  ballRect.top > obstacleRect.bottom)) {
+                // Verlies: bal raakt een obstakel
+                alert('Helaas! Je hebt verloren. Probeer het opnieuw.');
+                currentLevel = 1;
+                updateLevelDisplay();
+                placeElementsRandomly(); // Nieuw spel starten
+            }
+        });
     }
 
     // Event listener voor balbeweging (pijltjestoetsen)
