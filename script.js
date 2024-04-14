@@ -2,105 +2,69 @@ document.addEventListener("DOMContentLoaded", function() {
     const gameContainer = document.getElementById('game-container');
     const ball = document.getElementById('ball');
     const goal = document.getElementById('goal');
-    const obstacles = document.querySelectorAll('.obstacle');
+    const obstacle = document.getElementById('obstacle');
     const levelDisplay = document.getElementById('level-display');
     let currentLevel = 1;
+    let obstacleDirection = 1; // Richting van beweging: 1 (rechts) of -1 (links)
+    let obstacleSpeed = 3; // Snelheid van het obstakel
 
-    // Plaats de bal, doel en obstakels op willekeurige posities binnen het game-container
-    function placeElementsRandomly() {
+    // Functie om een willekeurige positie binnen het game-container te krijgen
+    function getRandomPosition() {
         const containerWidth = gameContainer.clientWidth;
         const containerHeight = gameContainer.clientHeight;
+        const size = 50; // Diameter van bal, doel en obstakel
 
-        // Plaats bal
-        ball.style.top = Math.random() * (containerHeight - ball.clientHeight) + 'px';
-        ball.style.left = Math.random() * (containerWidth - ball.clientWidth) + 'px';
+        const x = Math.floor(Math.random() * (containerWidth - size));
+        const y = Math.floor(Math.random() * (containerHeight - size));
 
-        // Plaats doel
-        goal.style.top = Math.random() * (containerHeight - goal.clientHeight) + 'px';
-        goal.style.left = Math.random() * (containerWidth - goal.clientWidth) + 'px';
-
-        // Plaats obstakels
-        obstacles.forEach(obstacle => {
-            obstacle.style.top = Math.random() * (containerHeight - obstacle.clientHeight) + 'px';
-            obstacle.style.left = Math.random() * (containerWidth - obstacle.clientWidth) + 'px';
-        });
+        return { x, y };
     }
 
-    // Beweeg obstakels binnen het game-container
-    function moveObstacles() {
-        obstacles.forEach(obstacle => {
-            const obstacleRect = obstacle.getBoundingClientRect();
-            const containerRect = gameContainer.getBoundingClientRect();
+    // Plaats de bal, doel en obstakel op willekeurige posities binnen het game-container
+    function placeElementsRandomly() {
+        const ballPosition = getRandomPosition();
+        const goalPosition = getRandomPosition();
+        const obstaclePosition = getRandomPosition();
 
-            let newX = obstacleRect.left - 1; // Beweeg naar links met snelheid van 1px/frame
-            if (newX + obstacleRect.width < 0) {
-                newX = containerRect.width; // Reset naar rechts als uit het scherm
-            }
+        ball.style.top = ballPosition.y + 'px';
+        ball.style.left = ballPosition.x + 'px';
 
-            obstacle.style.left = newX + 'px';
-        });
+        goal.style.top = goalPosition.y + 'px';
+        goal.style.left = goalPosition.x + 'px';
+
+        obstacle.style.top = obstaclePosition.y + 'px';
+        obstacle.style.left = obstaclePosition.x + 'px';
     }
 
-    // Start het bewegen van obstakels met interval
-    setInterval(moveObstacles, 10); // Beweeg elke 10 milliseconden
+    // Initialiseer het spel door de elementen op willekeurige posities te plaatsen
+    placeElementsRandomly();
 
-    // Update niveau-display met huidige level
+    // Functie om het obstakel heen en weer te laten bewegen
+    function moveObstacle() {
+        const obstacleStyle = getComputedStyle(obstacle);
+        let obstacleLeft = parseInt(obstacleStyle.left);
+
+        // Controleer of het obstakel de randen van het game-container bereikt
+        if (obstacleLeft <= 0 || obstacleLeft >= (gameContainer.clientWidth - obstacle.clientWidth)) {
+            obstacleDirection = -obstacleDirection; // Verander van richting
+        }
+
+        obstacleLeft += obstacleDirection * obstacleSpeed;
+        obstacle.style.left = obstacleLeft + 'px';
+
+        // Blijf het obstakel periodiek verplaatsen
+        requestAnimationFrame(moveObstacle);
+    }
+
+    // Start het bewegen van het obstakel
+    moveObstacle();
+
+    // Update het niveau-display met het huidige niveau
     function updateLevelDisplay() {
         levelDisplay.textContent = `Level: ${currentLevel}`;
     }
 
-    // Controleer winvoorwaarde (bereik het doel)
-    function checkGoalCollision() {
-        const ballRect = ball.getBoundingClientRect();
-        const goalRect = goal.getBoundingClientRect();
-
-        if (!(ballRect.right < goalRect.left ||
-              ballRect.left > goalRect.right ||
-              ballRect.bottom < goalRect.top ||
-              ballRect.top > goalRect.bottom)) {
-            // Win: ga naar volgend level
-            currentLevel++;
-            updateLevelDisplay();
-            const nextLevel = currentLevel + 1;
-            alert(`Gefeliciteerd! Je mag naar level ${currentLevel}. Op naar level ${nextLevel}!`);
-            placeElementsRandomly(); // Nieuwe posities voor bal, doel en obstakels
-        }
-    }
-
-    // Controleer verliesvoorwaarde (bal raakt rand van game-container of obstakel)
-    function checkLossCondition() {
-        const ballRect = ball.getBoundingClientRect();
-        const containerRect = gameContainer.getBoundingClientRect();
-
-        if (ballRect.left < containerRect.left ||
-            ballRect.right > containerRect.right ||
-            ballRect.top < containerRect.top ||
-            ballRect.bottom > containerRect.bottom) {
-            // Verlies: bal raakt de rand van het game-container
-            alert('Helaas! Je hebt verloren. Probeer het opnieuw.');
-            currentLevel = 1;
-            updateLevelDisplay();
-            placeElementsRandomly(); // Nieuw spel starten
-        }
-
-        // Controleer obstakelbotsing
-        obstacles.forEach(obstacle => {
-            const obstacleRect = obstacle.getBoundingClientRect();
-
-            if (!(ballRect.right < obstacleRect.left ||
-                  ballRect.left > obstacleRect.right ||
-                  ballRect.bottom < obstacleRect.top ||
-                  ballRect.top > obstacleRect.bottom)) {
-                // Verlies: bal raakt een obstakel
-                alert('Helaas! Je hebt verloren. Probeer het opnieuw.');
-                currentLevel = 1;
-                updateLevelDisplay();
-                placeElementsRandomly(); // Nieuw spel starten
-            }
-        });
-    }
-
-    // Event listener voor balbeweging (pijltjestoetsen)
+    // Voeg event listener toe voor balbeweging
     document.addEventListener('keydown', function(event) {
         const key = event.key;
         const ballStyle = getComputedStyle(ball);
@@ -126,11 +90,50 @@ document.addEventListener("DOMContentLoaded", function() {
         ball.style.top = ballTop + 'px';
         ball.style.left = ballLeft + 'px';
 
-        checkGoalCollision(); // Controleer of het doel is bereikt
-        checkLossCondition(); // Controleer of verliesvoorwaarde is voldaan
+        // Controleer winvoorwaarde
+        if (checkCollision(ball, goal)) {
+            currentLevel++;
+            updateLevelDisplay(); // Werk het niveau-display bij
+            const nextLevel = currentLevel + 1;
+            alert(`Gefeliciteerd! Je mag naar level ${currentLevel}. Op naar level ${nextLevel}!`);
+            placeElementsRandomly(); // Plaats elementen opnieuw voor het volgende level
+        }
+
+        // Controleer verliesvoorwaarde (bal raakt de rand van het game-container)
+        if (isOutOfBounds(ball)) {
+            alert('Helaas! Je hebt verloren. Probeer het opnieuw.');
+            currentLevel = 1; // Reset naar level 1 bij verlies
+            updateLevelDisplay(); // Werk het niveau-display bij
+            placeElementsRandomly(); // Plaats elementen opnieuw voor een nieuw spel
+        }
     });
 
-    // Initialiseer het spel
-    placeElementsRandomly();
+    // Controleer of de bal de rand van het game-container raakt
+    function isOutOfBounds(ball) {
+        const ballRect = ball.getBoundingClientRect();
+        const containerRect = gameContainer.getBoundingClientRect();
+
+        return (
+            ballRect.top < containerRect.top ||
+            ballRect.bottom > containerRect.bottom ||
+            ballRect.left < containerRect.left ||
+            ballRect.right > containerRect.right
+        );
+    }
+
+    // Controleer of er een botsing is tussen de bal en het doel
+    function checkCollision(ball, goal) {
+        const ballRect = ball.getBoundingClientRect();
+        const goalRect = goal.getBoundingClientRect();
+        return !(ballRect.right < goalRect.left ||
+                 ballRect.left > goalRect.right ||
+                 ballRect.bottom < goalRect.top ||
+                 ballRect.top > goalRect.bottom);
+    }
+
+    // Initialiseer het niveau-display
     updateLevelDisplay();
 });
+</script>
+</body>
+</html>
