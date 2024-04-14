@@ -20,24 +20,35 @@ document.addEventListener("DOMContentLoaded", function() {
         return { x, y };
     }
 
-    // Plaats de bal, doel en obstakel op willekeurige posities binnen het game-container
-    function placeElementsRandomly() {
+    // Plaats de bal op een willekeurige positie binnen het game-container
+    function placeBallRandomly() {
         const ballPosition = getRandomPosition();
-        const goalPosition = getRandomPosition();
-        const obstaclePosition = getRandomPosition();
-
         ball.style.top = ballPosition.y + 'px';
         ball.style.left = ballPosition.x + 'px';
+    }
 
+    // Plaats het doel op een willekeurige positie binnen het game-container
+    function placeGoalRandomly() {
+        const goalPosition = getRandomPosition();
         goal.style.top = goalPosition.y + 'px';
         goal.style.left = goalPosition.x + 'px';
+    }
 
-        // Plaats het obstakel op een willekeurige positie binnen het game-container
+    // Plaats het obstakel op een willekeurige positie binnen het game-container
+    function placeObstacleRandomly() {
+        const obstaclePosition = getRandomPosition();
         obstacle.style.top = obstaclePosition.y + 'px';
         obstacle.style.left = obstaclePosition.x + 'px';
     }
 
     // Initialiseer het spel door de elementen op willekeurige posities te plaatsen
+    function placeElementsRandomly() {
+        placeBallRandomly();
+        placeGoalRandomly();
+        placeObstacleRandomly();
+    }
+
+    // Initialiseer het spel bij het begin
     placeElementsRandomly();
 
     // Functie om het obstakel heen en weer te laten bewegen
